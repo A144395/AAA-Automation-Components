@@ -1,10 +1,4 @@
-﻿Param (
- 
-[String] $SecureStringPassword,
-
- [String] $env:app_secret
-
- )
+﻿
 
 
 ## Create Azure AD Application for Automation
