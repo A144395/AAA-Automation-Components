@@ -1,13 +1,9 @@
 ﻿## Create Azure AD Application for Automation
 
-Add-Type -Assembly System.Web
 
-$password = [System.Web.Security.Membership]::GeneratePassword(16,3)
-$securePassword = ConvertTo-SecureString -Force -AsPlainText -String $password
-
-#New-AzureRmADServicePrincipal -ApplicationId 00c01aaa-1603-49fc-b6df-b78c4e5138b4 -Password $securePassword
 #$SecureStringPassword = ConvertTo-SecureString -String "@gl@utomate" -AsPlainText -Force
-$azureAdApplication = New-AzureRmADApplication -DisplayName "aaa.automation.app" -HomePage "http://aaaautomationapp" -IdentifierUris "http://aaaautomationapp" -Password $securePassword
+$azureAdApplication = New-AzureRmADApplication -DisplayName "aaa.automation.app" -HomePage "http://aaaautomationapp" -IdentifierUris "http://aaaautomationapp" 
+#-Password $SecureStringPassword
 
 ## Create Service Principal and link to Cert
 
