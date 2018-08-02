@@ -2,7 +2,7 @@
  
 [Security.SecureString] $SecureStringPassword,
 
- [String] $env:app_secret
+ [Security.SecureString]  $env:app_secret
 
  )
 
