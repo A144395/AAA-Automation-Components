@@ -1,4 +1,13 @@
-﻿## Create Azure AD Application for Automation
+﻿Param (
+ 
+[Security.SecureString] $SecureStringPassword,
+
+ [String] $env:app_secret,
+
+ )
+
+
+## Create Azure AD Application for Automation
 $SecureStringPassword = ConvertTo-SecureString -String $env:app_secret -AsPlainText -Force
 #$SecureStringPassword = Get-Content $env:app_secret | ConvertTo-SecureString
 $azureAdApplication = New-AzureRmADApplication -DisplayName "aaa.automation.app" -HomePage "http://aaaautomationapp" -IdentifierUris "http://aaaautomationapp" -Password $SecureStringPassword
