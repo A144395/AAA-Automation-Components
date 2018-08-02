@@ -1,8 +1,7 @@
 ﻿
 
 Param (
-    [Parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
+  
     [String]$password="@gl@utomate"
 )
 
