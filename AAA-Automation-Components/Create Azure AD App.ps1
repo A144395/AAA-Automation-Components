@@ -1,6 +1,4 @@
-﻿para()
-
-## Create Azure AD Application for Automation
+﻿## Create Azure AD Application for Automation
 
 
 #$SecureStringPassword = ConvertTo-SecureString -String "@gl@utomate" -AsPlainText -Force
@@ -9,7 +7,7 @@ $azureAdApplication = New-AzureRmADApplication -DisplayName "aaa.automation.app"
 
 ## Create Service Principal and link to Cert
 
-$servicePrincipal = New-AzureRmADServicePrincipal -ApplicationId $azureAdApplication.ApplicationId
+$ServicePrincipal = New-AzureRmADServicePrincipal -ApplicationId $azureAdApplication.ApplicationId
 
 #Wait for SP to be created
 

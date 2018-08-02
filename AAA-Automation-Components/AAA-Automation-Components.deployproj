@@ -25,6 +25,7 @@
   <ItemGroup>
     <Content Include="azuredeploy.json" />
     <Content Include="azuredeploy.parameters.json" />
+    <None Include="AppSpRgRo - Copy.ps1" />
     <None Include="Create Azure AD App.ps1" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>
