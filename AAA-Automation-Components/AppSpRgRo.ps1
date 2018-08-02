@@ -59,23 +59,7 @@ $homePage = "http://" + $displayName
 $identifierUri = $homePage
 
 
-# Initialize subscription
-$isAzureModulePresent = Get-Module -Name AzureRM* -ListAvailable
-if ([String]::IsNullOrEmpty($isAzureModulePresent) -eq $true)
-{
-    Write-Output "Script requires AzureRM modules to be present. Obtain AzureRM from https://github.com/Azure/azure-powershell/releases. Please refer https://github.com/Microsoft/vsts-tasks/blob/master/Tasks/DeployAzureResourceGroup/README.md for recommended AzureRM versions." -Verbose
-    return
-}
 
-
-Import-Module -Name AzureRM.Profile
-
-#When not already logged in, login
-if (((get-azurermcontext).Account) -eq $null)
-{
-	Write-Output "Provide your credentials to access Azure subscription $subscriptionName" -Verbose	
-	Login-AzureRmAccount -subscriptionname $subscriptionName
-}
 
 $azureSubscription = Get-AzureRmSubscription -SubscriptionName $subscriptionName
 $tenantId = $azureSubscription.TenantId
