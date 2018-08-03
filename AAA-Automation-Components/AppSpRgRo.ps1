@@ -47,14 +47,12 @@
     [Parameter(HelpMessage="The prefix voor de Application Name", Mandatory=$false)]
     [string] $applicationNamePrefix = "AAA.",
 
-    [Parameter(HelpMessage="The end datetime when the password expires, default 1/1/2099 1:00 AM", Mandatory=$false)]
-    [datetime] $passwordExpirationDateTime = (Get-Date "1/1/2099 1:00 AM")
+    #[Parameter(HelpMessage="The end datetime when the password expires, default 1/1/2099 1:00 AM", Mandatory=$false)]
+    #[datetime] $passwordExpirationDateTime = (Get-Date "1/1/2099 1:00 AM")
 
-	
+		
 [string] $subtid
 [string] $subid
-
-
 )
 
 #Initialize
@@ -84,7 +82,7 @@ else
 {
     # Create a new AD Application
     Write-Output "Creating a new Application in AAD (App URI - $identifierUri)" -Verbose
-    $azureAdApplication = New-AzureRmADApplication -DisplayName $displayName -HomePage $homePage -IdentifierUris $identifierUri -Password $password -EndDate $passwordExpirationDateTime  -Verbose
+    $azureAdApplication = New-AzureRmADApplication -DisplayName $displayName -HomePage $homePage -IdentifierUris $identifierUri -Password $password  -Verbose
     $appId = $azureAdApplication.ApplicationId
     Write-Output "Azure AAD Application creation completed successfully (Application Id: $appId)" -Verbose
 }
