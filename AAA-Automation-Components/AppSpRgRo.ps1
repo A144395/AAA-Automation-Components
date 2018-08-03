@@ -55,15 +55,9 @@
 	[string] $subid
 )
 
-#Initialize
-$ErrorActionPreference = "Stop"
-$VerbosePreference = "SilentlyContinue"
 $displayName = [String]::Format("$applicationNamePrefix{0}", $applicationName)
 $homePage = "http://" + $displayName
 $identifierUri = $homePage
-
-
-
 
 Import-Module -Name AzureRM.Profile
 
