@@ -49,6 +49,12 @@
 
     [Parameter(HelpMessage="The end datetime when the password expires, default 1/1/2099 1:00 AM", Mandatory=$false)]
     [datetime] $passwordExpirationDateTime = (Get-Date "1/1/2099 1:00 AM")
+
+	
+[string] $subtid
+[string] $subid
+
+
 )
 
 #Initialize
@@ -63,8 +69,8 @@ $identifierUri = $homePage
 
 Import-Module -Name AzureRM.Profile
 
-$tenantId = $(env:ANPTenantid)
-$id = $(env:ANPSubscriptionID)
+$tenantId = $subtid
+$id = $subid
 
 #Check if the application already exists
 $app = Get-AzureRmADApplication -IdentifierUri $homePage
