@@ -1,5 +1,5 @@
 ﻿param(
-[string] $tenantid
+[string] $tenantid,
 [string] $appid
 )
 
