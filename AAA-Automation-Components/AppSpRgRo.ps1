@@ -51,8 +51,8 @@
     #[datetime] $passwordExpirationDateTime = (Get-Date "1/1/2099 1:00 AM")
 
 		
-[string] $subtid
-[string] $subid
+	[string] $subtid
+	[string] $subid
 )
 
 #Initialize
