@@ -60,9 +60,11 @@ $identifierUri = $homePage
 
 
 
-$azureSubscription = Get-AzureRmSubscription -SubscriptionName $subscriptionName
-$tenantId = $azureSubscription.TenantId
-$id = $azureSubscription.Id
+
+Import-Module -Name AzureRM.Profile
+
+$tenantId = $(ANPTenantid)
+$id = $(ANPSubscriptionID)
 
 #Check if the application already exists
 $app = Get-AzureRmADApplication -IdentifierUri $homePage

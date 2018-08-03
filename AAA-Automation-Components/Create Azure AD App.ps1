@@ -1,8 +1,8 @@
 ﻿## Create Azure AD Application for Automation
 
 
-#$SecureStringPassword = ConvertTo-SecureString -String "@gl@utomate" -AsPlainText -Force
-$azureAdApplication = New-AzureRmADApplication -DisplayName "aaa.automation.app" -HomePage "http://aaaautomationapp" -IdentifierUris "http://aaaautomationapp" 
+$SecureStringPassword = ConvertTo-SecureString -String "@gl@utomate" -AsPlainText -Force
+$azureAdApplication = New-AzureRmADApplication -DisplayName "aaa.automation.app" -HomePage "http://aaaautomationapp" -IdentifierUris "http://aaaautomationapp" -Password $SecureStringPassword
 #-Password $SecureStringPassword
 
 ## Create Service Principal and link to Cert
@@ -18,3 +18,6 @@ Start-Sleep -Seconds 10
 New-AzureRmRoleAssignment -ApplicationId $azureAdApplication.ApplicationId -RoleDefinitionName Contributor 
 
 #Remove-AzureRmADApplication -ApplicationId $azureAdApplication.ApplicationId
+
+
+
