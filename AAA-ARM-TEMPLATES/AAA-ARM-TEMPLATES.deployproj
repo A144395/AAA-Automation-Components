@@ -25,6 +25,8 @@
   <ItemGroup>
     <Content Include="azuredeploy.json" />
     <Content Include="azuredeploy.parameters.json" />
+    <None Include="billydeploy.json" />
+    <None Include="billydeploy - parameters.json" />
     <None Include="createuniquevmname.ps1" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>
