@@ -8,7 +8,7 @@
     [string] $subscriptionName,
 
     [Parameter(HelpMessage="Provide a name for the SPN that you would create")]
-    [Parameter(ParameterSetName="CreateVSTSPrincipalSubscriptionLevel", Mandatory=$true)]
+    [Parameter(ParameterSetName="CreateVSTSPrincipalSubscriptionLevel",c:\users\a144395\source\repos\AAA-Automation-Components\AAA-Automation-Components\AppSpRgRo.ps1 Mandatory=$true)]
     [Parameter(ParameterSetName="CreateVSTSPrincipalAndResourceGroups", Mandatory=$true)]
     [Parameter(ParameterSetName="CreateVSTSPrincipalWithExistingResourceGroups", Mandatory=$true)]
     [Parameter(ParameterSetName="CreateVSTSPrincipalOnly", Mandatory=$true)]
