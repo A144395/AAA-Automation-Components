@@ -1,7 +1,7 @@
 ﻿param(
 [string] $tenantid,
 [string] $appid,
-[string] $apppwd
+[string] $apppwd,
 [string] $sname
 )
 
