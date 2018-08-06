@@ -30,4 +30,3 @@ $uniqueMcName = "$($prefix)$newNo"
 Write-Host New VM Name $uniqueMcName
 Write-Host "##vso[task.setvariable variable=vmname]$uniqueMcName"
 
-Write-Host VM Name variable set to $(vmname)
