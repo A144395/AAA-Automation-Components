@@ -1,0 +1,115 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "businessOwner": {
+            "value": "Gary Mason"
+        },
+        "technicalOwner": {
+            "value": "Rahul Arora"
+        },
+        "environment": {
+            "value": "uat"
+        },
+        "costCode": {
+            "value": "PD-0422-C17"
+        },
+        "project": {
+            "value": "ECM"
+        },
+        "ScheduleType": {
+            "value": "Non_Prod_Std"
+        },
+        "SchedExemption": {
+            "value": "false"
+        },
+        "CustomSchedule": {
+            "value": ""
+        },
+        "vmName": {
+            "value": "azsaw0519"
+        },
+        "vmLocation": {
+            "value": "Sydney"
+        },
+        "platform": {
+            "value": "WinSrv"
+        },
+        "WindowsOffer": {
+            "value": "WindowsServer"
+        },
+        "WindowsSku": {
+            "value": "2016-Datacenter"
+        },
+        "WindowsPublisher": {
+            "value": "MicrosoftWindowsServer"
+        },
+        "LinuxOffer": {
+            "value": "SLES-SAP-BYOS"
+        },
+        "LinuxSku": {
+            "value": "12-SP3"
+        },
+        "LinuxPublisher": {
+            "value": "SUSE"
+        },
+        "pwdOrssh": {
+            "value": "Hp0p3n^1ew!@"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_DS3_v2"
+        },
+        "EnableAcceleratedNetworking": {
+            "value": true
+        },
+        "vnetName": {
+            "value": "erp-nprd-vnet-01"
+        },
+        "vnetResourceGroup": {
+            "value": "erp-nprd-vnet-rg"
+        },
+        "SubnetName": {
+            "value": "sand-app"
+        },
+        "storageAccountType": {
+            "value": "Premium_LRS"
+        },
+        "EnableAvailabilitySet": {
+            "value": "No"
+        },
+        "availabilitySetName": {
+            "value": "ecm-otds-as"
+        },
+        "domainJoinUserName": {
+            "value": "AGL\\svc_azure_automation"
+        },
+        "domainJoinUserPassword": {
+            "value": "9whXZ2mIq2bqkX"
+        },
+        "domainFQDN": {
+            "value": "agl.int"
+        },
+        "ouPath": {
+            "value": "OU=SAP,OU=Servers,OU=Resources,DC=agl,DC=int"
+        },
+        "EnableCyberArk": {
+            "value": "Yes"
+        },
+        "BootDiagSA": {
+            "value": "http://erpshareddiag01.blob.core.windows.net"
+          },
+        "numberOfDataDisks": {
+            "value": 1
+        },
+        "diskConfig": {
+            "value": [
+                {
+                    "name": "azsaw0519-data1",
+                    "diskSizeGB": "10",
+                    "lun": "0",
+                    "type": "Standard_LRS"
+                }
+            ]
+        }
+    }
+}
