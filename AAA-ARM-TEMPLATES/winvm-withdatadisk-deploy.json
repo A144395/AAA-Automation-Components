@@ -48,14 +48,14 @@
     },
     "costCode": {
       "type": "string",
-      "defaultValue": "PD-0422-C16-01",
+      "defaultValue": "AAA",
       "metadata": {
         "description": "Provides a charge code or cost center to attribute the bill for the resources too. This could be a project code or cost Centre"
       }
     },
     "project": {
       "type": "string",
-      "defaultValue": "PT3",
+      "defaultValue": "AAA",
       "metadata": {
         "description": "Provides information on the project that the resource group and resources belong to"
       }
@@ -105,13 +105,7 @@
     },
     "vmWindowsOSVersion": {
       "type": "string",
-      "defaultValue": "2012-R2-Datacenter",
-      "allowedValues": [
-        "2008-R2-SP1",
-        "2012-Datacenter",
-        "2012-R2-Datacenter",
-        "Windows-Server-Technical-Preview"
-      ]
+      "defaultValue": "2012-R2-Datacenter"
     },
     "virtualNetworkName": {
       "type": "string",
