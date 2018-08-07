@@ -308,11 +308,17 @@
       "type": "Microsoft.Compute/virtualMachines"
     },
     {
-      "name": "[parameters('availabilitysetName')]",
-      "type": "Microsoft.Compute/availabilitySets",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2017-12-01",
       "dependsOn": [],
+      "location": "[resourceGroup().location]",
+      "name": "[parameters('availabilitysetName')]",
+      "properties": {
+        "platformFaultDomainCount": "[variables('asfdcount')]",
+        "platformUpdateDomainCount": "[variables('asudcount')]"
+      },
+      "sku": {
+        "name": "Aligned"
+      },
       "tags": {
         "displayName": "availabilityset",
         "BusinessOwner": "[parameters('businessOwner')]",
@@ -324,10 +330,7 @@
         "SchedExemption": "[parameters('SchedExemption')]",
         "CustomSchedule": "[parameters('CustomSchedule')]"
       },
-      "properties": {
-        "platformFaultDomainCount": "[variables('asfdcount')]",
-        "platformUpdateDomainCount": "[variables('asudcount')]"
-      } 
+      "type": "Microsoft.Compute/availabilitySets"
     },
     {
       "name": "[variables('vmNic2Name')]",
