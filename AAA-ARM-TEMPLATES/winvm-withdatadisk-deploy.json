@@ -145,7 +145,7 @@
       "defaultValue": "sap-poc-nprd-vnet-01"
     },
     "virtualNetworkResourceGroup": {
-      "defaultValue": "[resourceGroup().name]",
+      "defaultValue": "AAA-PTE-POC",
       "type": "string"
     },
     "vmAdminPassword": {
