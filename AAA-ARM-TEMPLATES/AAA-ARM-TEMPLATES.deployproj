@@ -23,11 +23,10 @@
   <Import Condition=" Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets') " Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets" />
   <!-- vertag<:>end -->
   <ItemGroup>
+    <Content Include="winvm-withdatadisk.parameters.json" />
     <Content Include="winvm-nodatadisk-deploy.json" />
     <Content Include="winvm-withdatadisk-deploy.json" />
-    <Content Include="azuredeploy.parameters.json" />
-    <None Include="billydeploy.json" />
-    <None Include="billydeploy - parameters.json" />
+    <Content Include="winvm-nodatadisk.parameters.json" />
     <None Include="createuniquevmname.ps1" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>

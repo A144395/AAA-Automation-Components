@@ -19,7 +19,7 @@
     "vmsize": {
       "type": "string",
       "defaultValue": "Standard_E32s_v3",
-      "metadata",
+      "metadata":
       {
         "description": "Size of VM"
       }

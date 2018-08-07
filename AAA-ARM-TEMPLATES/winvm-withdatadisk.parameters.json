@@ -1,0 +1,68 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+
+
+    "businessOwner": {
+      "value": ""
+    },
+
+    "timezone": {
+      "value": ""
+    },
+
+    "vmsize": {
+      "value": ""
+    },
+    "technicalOwner": { "value": "" },
+    "environment": { "value": "" },
+    "costCode": { "value": "" },
+    "project": {
+      "value": ""
+    },
+    "ScheduleType": {
+      "value": ""
+    },
+    "SchedExemption": {
+      "value": ""
+    },
+    "CustomSchedule": { "value": "" },
+    "storageaccountType": {
+      "value": ""
+    },
+    "vmName": { "value": "" },
+    "vmAdminUserName": {
+      "value": ""
+    },
+    "vmAdminPassword": { "value": "" },
+    "vmWindowsOSVersion": {
+      "value": ""
+    },
+    "virtualNetworkName": { "value": "" },
+    "virtualNetworkResourceGroup": {
+      "value": ""
+    },
+    "SubnetName": {
+      "value": ""
+    },
+    "CASubnetName": {
+      "value": ""
+    },
+    "BootDiagSA": {
+      "value": ""
+    },
+
+
+    "availabilitysetName": { "value": "" },
+    "fqdn": {
+      "value": ""
+    },
+    "oupath": { "value": "" },
+    "domainjoinusername": { "value": "" },
+    "domainjoinpassword": { "value": "" },
+    "domainjoin": { "value": "" },
+    "diskcount": { "value": "" }
+  }
+
+}
