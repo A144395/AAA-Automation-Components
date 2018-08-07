@@ -1,0 +1,415 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "businessOwner": {
+      "type": "string",
+      "defaultValue": "James Vincent",
+      "metadata": {
+        "description": "Responsible for billing of the resource"
+      }
+    },
+    "timezone": {
+      "type": "string",
+      "defaultValue": "AUS Eastern Standard Time",
+      "metadata": {
+        "description": "Time Zone for VM"
+      }
+    },
+    "vmsize": {
+      "type": "string",
+      "defaultValue": "Standard_E32s_v3",
+      "metadata",
+      {
+        "description": "Size of VM"
+      }
+    },
+    "technicalOwner": {
+      "type": "string",
+      "defaultValue": "Dylan Longworth",
+      "metadata": {
+        "description": "Responsible for the technology decisioins of the resource"
+      }
+    },
+    "environment": {
+      "type": "string",
+      "metadata": {
+        "description": "Provides infromation on the environment that the resource belongs to such as nprd"
+      },
+      "allowedValues": [
+        "prod",
+        "preprod",
+        "sand",
+        "dev",
+        "test",
+        "dr",
+        "uat"
+      ]
+    },
+    "costCode": {
+      "type": "string",
+      "defaultValue": "PD-0422-C16-01",
+      "metadata": {
+        "description": "Provides a charge code or cost center to attribute the bill for the resources too. This could be a project code or cost Centre"
+      }
+    },
+    "project": {
+      "type": "string",
+      "defaultValue": "PT3",
+      "metadata": {
+        "description": "Provides information on the project that the resource group and resources belong to"
+      }
+    },
+    "ScheduleType": {
+      "type": "string",
+      "defaultValue": "Non_Prod_Std",
+      "metadata": {
+        "description": "scheduleType for tagging purpose, e.g. Non_Prod_Std, AlwaysOn_24_7"
+      }
+    },
+    "SchedExemption": {
+      "type": "string",
+      "defaultValue": "FALSE",
+      "metadata": {
+        "description": "scheduleExemption for tagging purpose"
+      }
+    },
+    "CustomSchedule": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "CustomSchedule for tagging purpose"
+      }
+    },
+    "storageaccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
+    },
+    "vmName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "vmAdminUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "vmAdminPassword": {
+      "type": "securestring"
+    },
+    "vmWindowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2008-R2-SP1",
+        "2012-Datacenter",
+        "2012-R2-Datacenter",
+        "Windows-Server-Technical-Preview"
+      ]
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "aunp-syd-nprd-vnet-01"
+    },
+    "virtualNetworkResourceGroup": {
+      "type": "string",
+      "defaultValue": "aunp-nprd-rg-01"
+    },
+    "SubnetName": {
+      "type": "string",
+      "defaultValue": "Enter Subnet Name",
+      "metadata": {
+        "description": "Private IP for VM instances from Subnet"
+      }
+    },
+    "CASubnetName": {
+      "defaultValue": "Enter Cyber Ark Subnet Name",
+      "metadata": {
+        "description": "Cyber Ark Subnet"
+      },
+      "type": "string"
+    },
+    "BootDiagSA": {
+      "type": "string",
+      "metadata": {
+        "description": "URI for storing Boot diagnostic logs"
+      }
+    },
+
+
+    "availabilitysetName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fqdn": {
+      "type": "string",
+      "minLength": 1
+    },
+    "oupath": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domainjoinusername": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domainjoinpassword": {
+      "type": "string",
+      "minLength": 1
+    },
+    "domainjoin": {
+      "defaultValue": "no",
+      "allowedValues": [
+        "yes",
+        "no"
+              ],
+      "type": "string",
+      "minLength": 1
+    }
+
+  },
+  "variables": {
+    "asfdcount": 2,
+    "asudcount": 3,
+    "storageaccountName": "[concat('storageaccount', uniqueString(resourceGroup().id))]",
+    "vmImageOffer": "WindowsServer",
+    "vmImagePublisher": "MicrosoftWindowsServer",
+    "vmNicName": "[concat(parameters('vmName'), 'NetworkInterface')]",
+    "vmNic2Name": "[concat(parameters('vmName'), 'NetworkInterface2')]",
+    "vmOSDiskName": "vmOSDisk",
+    "vmStorageAccountContainerName": "vhds",
+    "vmSubnetRef": "[concat(variables('vmVnetID'), '/subnets/', parameters('SubnetName'))]",
+    "vmVmSize": "[parameters('vmsize')]",
+    "vmVnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "vmNic2VnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "vmNic2SubnetRef": "[concat(variables('vmNic2VnetID'), '/subnets/', parameters('CASubnetName'))]"
+  },
+  "resources": [
+    {
+      "name": "[variables('storageaccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-01-01",
+      "sku": {
+        "name": "[parameters('storageaccountType')]"
+      },
+      "dependsOn": [],
+      "tags": {
+        "BusinessOwner": "[parameters('businessOwner')]",
+        "CostCode": "[parameters('CostCode')]",
+        "CustomSchedule": "[parameters('CustomSchedule')]",
+        "displayName": "storageaccount",
+        "Environment": "[parameters('environment')]",
+        "Project": "[parameters('project')]",
+        "SchedExemption": "[parameters('SchedExemption')]",
+        "ScheduleType": "[parameters('ScheduleType')]",
+        "TechnicalOwner": "[parameters('technicalOwner')]"
+      },
+      "kind": "Storage",
+      "properties": {
+        "encryption": {
+          "keySource": "Microsoft.Storage",
+          "services": {
+            "blob": {
+              "enabled": true
+            },
+            "file": {
+              "enabled": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "[variables('vmNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "australiaeast",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "vmNic",
+        "BusinessOwner": "[parameters('businessOwner')]",
+        "TechnicalOwner": "[parameters('technicalOwner')]",
+        "Environment": "[parameters('environment')]",
+        "CostCode": "[parameters('costCode')]",
+        "Project": "[parameters('project')]",
+        "ScheduleType": "[parameters('ScheduleType')]",
+        "SchedExemption": "[parameters('SchedExemption')]",
+        "CustomSchedule": "[parameters('CustomSchedule')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('vmSubnetRef')]"
+              }
+            }
+          }
+        ],
+        "enableAcceleratedNetworking": "true"
+      }
+    },
+
+    {
+      "name": "[parameters('vmName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageaccountName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('vmNicName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('vmNic2Name'))]"
+      ],
+      "tags": {
+        "displayName": "vm"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('vmVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('vmName')]",
+          "adminUsername": "[parameters('vmAdminUsername')]",
+          "adminPassword": "[parameters('vmAdminPassword')]",
+          "windowsConfiguration": {
+            "timeZone": "[parameters('timezone')"
+            ]
+          }
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('vmImagePublisher')]",
+            "offer": "[variables('vmImageOffer')]",
+            "sku": "[parameters('vmWindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "[concat(parameters('vmName'), '-osdisk')]",
+            "createOption": "FromImage"
+          }
+
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vmNicName'))]",
+              "properties": {
+                "primary": true
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vmNic2Name'))]",
+              "properties": {
+                "primary": false
+              }
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[concat('http://', variables('storageaccountName'), '.blob.core.windows.net')]"
+          }
+        },
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitysetName'))]"
+        }
+      }
+    },
+    {
+      "name": "[parameters('availabilitysetName')]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "availabilityset",
+        "BusinessOwner": "[parameters('businessOwner')]",
+        "TechnicalOwner": "[parameters('technicalOwner')]",
+        "Environment": "[parameters('environment')]",
+        "CostCode": "[parameters('CostCode')]",
+        "Project": "[parameters('project')]",
+        "ScheduleType": "[parameters('ScheduleType')]",
+        "SchedExemption": "[parameters('SchedExemption')]",
+        "CustomSchedule": "[parameters('CustomSchedule')]"
+      },
+      "properties": {
+        "platformFaultDomainCount": "[variables('asfdcount')]",
+        "platformUpdateDomainCount": "[variables('asudcount')]"
+      },
+      "sku": {
+        "name": "Aligned"
+      }
+    },
+    {
+      "name": "[variables('vmNic2Name')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "australiaeast",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "vmNic2",
+        "BusinessOwner": "[parameters('businessOwner')]",
+        "TechnicalOwner": "[parameters('technicalOwner')]",
+        "Environment": "[parameters('environment')]",
+        "CostCode": "[parameters('costCode')]",
+        "Project": "[parameters('project')]",
+        "ScheduleType": "[parameters('ScheduleType')]",
+        "SchedExemption": "[parameters('SchedExemption')]",
+        "CustomSchedule": "[parameters('CustomSchedule')]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('vmNic2SubnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "condition": "[if(equals(parameters('domainjoin'), 'yes'), bool('true'), bool('false'))]",
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('vmName'),'/joindomain')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+      ],
+      "tags": {
+        "displayName": "JoinDomain"
+      },
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "JsonADDomainExtension",
+        "typeHandlerVersion": "1.0",
+        "settings": {
+          "Name": "[parameters('fqdn')]",
+          "OUPath": "[parameters('oupath')]",
+          "User": "[parameters('domainjoinusername')]",
+          "Restart": "true",
+          "Options": "3"
+        },
+        "protectedsettings": {
+          "Password": "[parameters('domainjoinpassword')]"
+        }
+      }
+    }
+
+  ],
+    "outputs": {}
+  }
