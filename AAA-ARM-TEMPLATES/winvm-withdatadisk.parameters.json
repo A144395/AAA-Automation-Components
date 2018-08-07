@@ -2,67 +2,61 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-
-
+    "availabilitysetName": { "value": "" },
+    "BootDiagSA": {
+      "value": ""
+    },
     "businessOwner": {
       "value": ""
     },
-
-    "timezone": {
+    "CASubnetName": {
       "value": ""
     },
-
-    "vmsize": {
-      "value": ""
-    },
-    "technicalOwner": { "value": "" },
-    "environment": { "value": "" },
     "costCode": { "value": "" },
-    "project": {
+    "CustomSchedule": { "value": "" },
+    "diskcount": { "value": "" },
+    "domainjoin": { "value": "" },
+    "domainjoinpassword": { "value": "" },
+    "domainjoinusername": { "value": "" },
+    "environment": { "value": "" },
+    "fqdn": {
       "value": ""
     },
-    "ScheduleType": {
+    "oupath": { "value": "" },
+    "project": {
       "value": ""
     },
     "SchedExemption": {
       "value": ""
     },
-    "CustomSchedule": { "value": "" },
+    "ScheduleType": {
+      "value": ""
+    },
     "storageaccountType": {
       "value": ""
     },
-    "vmName": { "value": "" },
-    "vmAdminUserName": {
+    "SubnetName": {
       "value": ""
     },
-    "vmAdminPassword": { "value": "" },
-    "vmWindowsOSVersion": {
+    "technicalOwner": { "value": "" },
+    "timezone": {
       "value": ""
     },
     "virtualNetworkName": { "value": "" },
     "virtualNetworkResourceGroup": {
       "value": ""
     },
-    "SubnetName": {
+    "vmAdminPassword": { "value": "" },
+    "vmAdminUserName": {
       "value": ""
     },
-    "CASubnetName": {
+    "vmName": { "value": "" },
+    "vmsize": {
       "value": ""
     },
-    "BootDiagSA": {
+    "vmWindowsOSVersion": {
       "value": ""
-    },
-
-
-    "availabilitysetName": { "value": "" },
-    "fqdn": {
-      "value": ""
-    },
-    "oupath": { "value": "" },
-    "domainjoinusername": { "value": "" },
-    "domainjoinpassword": { "value": "" },
-    "domainjoin": { "value": "" },
-    "diskcount": { "value": "" }
+    }
   }
 
 }

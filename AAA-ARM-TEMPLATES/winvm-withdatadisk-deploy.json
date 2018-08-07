@@ -142,11 +142,11 @@
     },
     "virtualNetworkName": {
       "type": "string",
-      "defaultValue": "aunp-syd-nprd-vnet-01"
+      "defaultValue": "sap-poc-nprd-vnet-01"
     },
     "virtualNetworkResourceGroup": {
       "type": "string",
-      "defaultValue": "aunp-nprd-rg-01"
+      "defaultValue": "[resourceGroup().name]"
     },
     "vmAdminPassword": {
       "type": "securestring"
@@ -399,6 +399,31 @@
           "Password": "[parameters('domainjoinpassword')]"
         }
       }
+    },
+    {
+      "name": "[parameters('virtualNetworkName')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-03-30",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "vnet"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('vnetPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('SubnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('vnetSubnet1Prefix')]"
+            }
+          }
+        ]
+      }
     }
 
   ],
@@ -416,6 +441,10 @@
     "vmVmSize": "[parameters('vmsize')]",
     "vmVnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
     "vmNic2VnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-    "vmNic2SubnetRef": "[concat(variables('vmNic2VnetID'), '/subnets/', parameters('CASubnetName'))]"
+    "vmNic2SubnetRef": "[concat(variables('vmNic2VnetID'), '/subnets/', parameters('CASubnetName'))]",
+    "vnetPrefix": "10.228.16.0/21",
+    "vnetSubnet1Name": "[parameters('SubnetName')]",
+    "vnetSubnet1Prefix": "10.228.16.0/24"
+
   }
 }
