@@ -21,7 +21,7 @@
       }
     },
     "CASubnetName": {
-      "defaultValue": "Enter Cyber Ark Subnet Name",
+      "defaultValue": "casubnet",
       "metadata": {
         "description": "Cyber Ark Subnet"
       },
@@ -193,19 +193,7 @@
         "TechnicalOwner": "[parameters('technicalOwner')]"
       },
       "kind": "Storage",
-      "properties": {
-        "encryption": {
-          "keySource": "Microsoft.Storage",
-          "services": {
-            "blob": {
-              "enabled": true
-            },
-            "file": {
-              "enabled": true
-            }
-          }
-        }
-      }
+      "properties": {}
     },
     {
       "apiVersion": "2017-10-01",
@@ -424,6 +412,12 @@
             "properties": {
               "addressPrefix": "[variables('vnetSubnet1Prefix')]"
             }
+          },
+          {
+            "name": "[parameters('CASubnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('vnetSubnet2Prefix')]"
+            }
           }
         ]
       }
@@ -436,18 +430,18 @@
     "storageaccountName": "[concat('sa', uniqueString(resourceGroup().id))]",
     "vmImageOffer": "WindowsServer",
     "vmImagePublisher": "MicrosoftWindowsServer",
-    "vmNicName": "[concat(parameters('vmName'), 'NetworkInterface')]",
     "vmNic2Name": "[concat(parameters('vmName'), 'NetworkInterface2')]",
+    "vmNic2SubnetRef": "[concat(variables('vmNic2VnetID'), '/subnets/', parameters('CASubnetName'))]",
+    "vmNic2VnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+    "vmNicName": "[concat(parameters('vmName'), 'NetworkInterface')]",
     "vmOSDiskName": "vmOSDisk",
     "vmStorageAccountContainerName": "vhds",
     "vmSubnetRef": "[concat(variables('vmVnetID'), '/subnets/', parameters('SubnetName'))]",
     "vmVmSize": "[parameters('vmsize')]",
     "vmVnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-    "vmNic2VnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-    "vmNic2SubnetRef": "[concat(variables('vmNic2VnetID'), '/subnets/', parameters('CASubnetName'))]",
     "vnetPrefix": "10.228.16.0/21",
     "vnetSubnet1Name": "[parameters('SubnetName')]",
-    "vnetSubnet1Prefix": "10.228.16.0/24"
-
+    "vnetSubnet1Prefix": "10.228.16.0/24",
+    "vnetSubnet2Prefix": "10.228.17.0/24"
   }
 }
