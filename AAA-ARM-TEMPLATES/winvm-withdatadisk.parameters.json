@@ -7,9 +7,6 @@
     "availabilitysetName": {
                               "value": ""
                            },
-    "BootDiagSA": {
-      "value": ""
-                  },
     "businessOwner": {"value": ""},
     "CASubnetName": {"value": ""},
     "costCode": { "value": "" },
