@@ -12,19 +12,18 @@ Add-AzureRmAccount -Credential $credential -ServicePrincipal -Tenant $tenantid
 Select-AzureRmSubscription -SubscriptionName $sname
 
 
-$rgName = '*azsaw*'
-$prefix = 'azsaw'
-$seqNo = 000
-$lastVm = Get-AzureRmVM | Where-Object Name -Like $rgName | Sort-Object Name -Descending | Select-Object -First(1) Name
+$hname = '*azsapw*'
+$prefix = 'azsapw'
+$seqNo = 0000
+$lastVm = Get-AzureRmVM | Where-Object Name -Like $hname | Sort-Object Name -Descending | Select-Object -First(1) Name
 
 if($lastVm.Name -match "\d"){
-    write-host "Seq does not exists!"
-    write-host "Last VM: $($lastVm.Name)"
-    $seqNo = ($lastVm.Name.Split('azsaw')) | Out-String 
+    write-host "Hostname does not exists!"
+    $seqNo = ($lastVm.Name.Split('azsapw')) | Out-String 
     }
 
 $newNo = [int]($seqNo)+1
-$newNo = $newNo.ToString("0000")
+$newNo = $newNo.ToString("00000")
 $uniqueMcName = "$($prefix)$newNo"
 
 Write-Host New VM Name $uniqueMcName
