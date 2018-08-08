@@ -7,12 +7,6 @@
       "type": "string",
       "minLength": 1
     },
-    "BootDiagSA": {
-      "type": "string",
-      "metadata": {
-        "description": "URI for storing Boot diagnostic logs"
-      }
-    },
     "businessOwner": {
       "type": "string",
       "defaultValue": "James Vincent",
@@ -166,9 +160,18 @@
         "description": "Size of VM"
       }
     },
-    "vmWindowsOSVersion": {
-      "defaultValue": "2012-R2-Datacenter",
+    "imagesku": {
+      "defaultValue": "2016-Datacenter",
       "type": "string"
+    },
+    "imageoffer": {
+      "defaultValue": "WindowsServer",
+      "type": "string"
+    },
+    "imagepublisher": {
+      "defaultValue": "MicrosoftWindowsServer",
+      "type": "string"
+
     }
   },
   "resources": [
@@ -199,8 +202,8 @@
       "apiVersion": "2017-10-01",
       "dependsOn": [
         "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
-                    ],
-      "location": "australiaeast",
+      ],
+      "location": "[resourceGroup().location]",
       "name": "[variables('vmNicName')]",
       "properties": {
         "ipConfigurations": [
@@ -266,9 +269,9 @@
             }
           ],
           "imageReference": {
-            "publisher": "[variables('vmImagePublisher')]",
             "offer": "[variables('vmImageOffer')]",
-            "sku": "[parameters('vmWindowsOSVersion')]",
+            "publisher": "[variables('vmImagePublisher')]",
+            "sku": "[variables('vmImageSku')]",
             "version": "latest"
           },
           "osDisk": {
@@ -335,7 +338,7 @@
     {
       "name": "[variables('vmNic2Name')]",
       "type": "Microsoft.Network/networkInterfaces",
-      "location": "australiaeast",
+      "location": "[resourceGroup().location]",
       "apiVersion": "2016-03-30",
       "dependsOn": [
         "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
@@ -431,8 +434,9 @@
     "asfdcount": 2,
     "asudcount": 3,
     "storageaccountName": "[concat('sa', uniqueString(resourceGroup().id))]",
-    "vmImageOffer": "WindowsServer",
-    "vmImagePublisher": "MicrosoftWindowsServer",
+    "vmImageOffer": "[parameters('imageoffer')]",
+    "vmImageSku": "[parameters('imagesku')]",
+    "vmImagePublisher": "[parameters('imagepublisher')]",
     "vmNic2Name": "[concat(parameters('vmName'), 'NetworkInterface2')]",
     "vmNic2SubnetRef": "[concat(variables('vmNic2VnetID'), '/subnets/', parameters('CASubnetName'))]",
     "vmNic2VnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
