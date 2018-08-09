@@ -5,7 +5,6 @@
 [string] $sname
 )
 
-
 $secPassword = ConvertTo-SecureString $apppwd -AsPlainText –Force
 $credential = New-Object System.Management.Automation.PSCredential($appid, $secPassword)
 Add-AzureRmAccount -Credential $credential -ServicePrincipal -Tenant $tenantid
