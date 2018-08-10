@@ -14,13 +14,6 @@
         "description": "Responsible for billing of the resource"
       }
     },
-    "MgmtSubnetName": {
-      "type": "string",
-      "defaultValue": "mgmt",
-      "metadata": {
-        "description": "Cyber Ark Subnet"
-      }
-    },
     "costCode": {
       "type": "string",
       "defaultValue": "AAA",
@@ -35,17 +28,17 @@
         "description": "CustomSchedule for tagging purpose"
       }
     },
-    "diskcount": {
-      "type": "int",
-      "metadata": {
-        "description": "Number of data disks to be attached."
-      }
-    },
     "dataDiskSize": {
       "type": "int",
       "defaultValue": 1023,
       "metadata": {
         "description": "Size of data disks to be attached."
+      }
+    },
+    "diskcount": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of data disks to be attached."
       }
     },
     "domainjoin": {
@@ -84,6 +77,28 @@
     "fqdn": {
       "type": "string",
       "minLength": 1
+    },
+    "imageoffer": {
+      "type": "string",
+      "defaultValue": "WindowsServer"
+    },
+    "imagepublisher": {
+      "type": "string",
+      "defaultValue": "MicrosoftWindowsServer"
+
+
+    },
+    "imagesku": {
+      "type": "string",
+      "defaultValue": "2016-Datacenter"
+
+    },
+    "MgmtSubnetName": {
+      "type": "string",
+      "defaultValue": "mgmt",
+      "metadata": {
+        "description": "Cyber Ark Subnet"
+      }
     },
     "oupath": {
       "type": "string",
@@ -169,22 +184,6 @@
       "metadata": {
         "description": "Size of VMs"
       }
-    },
-    "imagesku": {
-      "type": "string",
-      "defaultValue": "2016-Datacenter"
-
-    },
-
-    "imageoffer": {
-      "type": "string",
-      "defaultValue": "WindowsServer"
-    },
-    "imagepublisher": {
-      "type": "string",
-      "defaultValue": "MicrosoftWindowsServer"
-
-
     }
   },
   "resources": [
