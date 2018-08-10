@@ -26,5 +26,4 @@ $newNo = $newNo.ToString("0000")
 $uniqueMcName = "$($prefix)$newNo"
 
 Write-Host New VM Name $uniqueMcName
-Write-Host ##vso[task.setvariable variable=vmname]$uniqueMcName"
-
+Write-Host "##vso[task.setvariable variable=vmname]$uniqueMcName"
