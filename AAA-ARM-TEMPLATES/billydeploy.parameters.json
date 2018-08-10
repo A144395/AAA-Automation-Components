@@ -54,7 +54,7 @@
             "value": "SUSE"
         },
         "pwdOrssh": {
-            "value": "Hp0p3n^1ew!@"
+            "value": "xxxxx"
         },
         "virtualMachineSize": {
             "value": "Standard_DS3_v2"
@@ -84,7 +84,7 @@
             "value": "AGL\\svc_azure_automation"
         },
         "domainJoinUserPassword": {
-            "value": "9whXZ2mIq2bqkX"
+            "value": "xxxxxx"
         },
         "domainFQDN": {
             "value": "agl.int"
