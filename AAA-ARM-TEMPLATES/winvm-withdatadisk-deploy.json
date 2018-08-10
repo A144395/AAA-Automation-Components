@@ -167,7 +167,7 @@
       "type": "string",
       "defaultValue": "Standard_E32s_v3",
       "metadata": {
-        "description": "Size of VM"
+        "description": "Size of VMs"
       }
     },
     "imagesku": {
