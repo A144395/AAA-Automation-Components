@@ -14,8 +14,8 @@
         "description": "Responsible for billing of the resource"
       }
     },
-    "CASubnetName": {
-      "defaultValue": "casubnet",
+    "MgmtSubnetName": {
+      "defaultValue": "mgmt",
       "metadata": {
         "description": "Cyber Ark Subnet"
       },
@@ -41,7 +41,14 @@
         "description": "Number of data disks to be attached."
       }
     },
-    "domainjoin": {
+    "dataDiskSize": {
+      "type": "int",
+      "defaultValue": 1023,
+      "metadata": {
+        "description": "Size of data disks to be attached."
+      }
+    },
+        "domainjoin": {
       "defaultValue": "no",
       "allowedValues": [
         "yes",
@@ -264,7 +271,7 @@
                 "name": "[concat(parameters('vmName'),'-dataDisk', padLeft(copyIndex('dataDisks'), 2, '0'))]",
                 "lun": "[copyIndex('dataDisks')]",
                 "createOption": "Empty",
-                "diskSizeGB": 1023
+                "diskSizeGB": "[parameters('dataDiskSize')]"
               }
             }
           ],
@@ -345,7 +352,7 @@
 
       ],
       "tags": {
-        "displayName": "vmNic2",
+        "displayName": "ManagementNic",
         "BusinessOwner": "[parameters('businessOwner')]",
         "TechnicalOwner": "[parameters('technicalOwner')]",
         "Environment": "[parameters('environment')]",
@@ -396,38 +403,8 @@
           "Password": "[parameters('domainjoinpassword')]"
         }
       }
-    },
-    {
-      "name": "[parameters('virtualNetworkName')]",
-      "type": "Microsoft.Network/virtualNetworks",
-      "location": "[resourceGroup().location]",
-      "apiVersion": "2016-03-30",
-      "dependsOn": [ ],
-      "tags": {
-        "displayName": "vnet"
-      },
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[variables('vnetPrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[parameters('SubnetName')]",
-            "properties": {
-              "addressPrefix": "[variables('vnetSubnet1Prefix')]"
-            }
-          },
-          {
-            "name": "[parameters('CASubnetName')]",
-            "properties": {
-              "addressPrefix": "[variables('vnetSubnet2Prefix')]"
-            }
-          }
-        ]
-      }
     }
+    
 
   ],
   "variables": {
@@ -438,7 +415,7 @@
     "vmImageSku": "[parameters('imagesku')]",
     "vmImagePublisher": "[parameters('imagepublisher')]",
     "vmNic2Name": "[concat(parameters('vmName'), 'NetworkInterface2')]",
-    "vmNic2SubnetRef": "[concat(variables('vmNic2VnetID'), '/subnets/', parameters('CASubnetName'))]",
+    "vmNic2SubnetRef": "[concat(variables('vmNic2VnetID'), '/subnets/', parameters('MgmtSubnetName'))]",
     "vmNic2VnetID": "[resourceId(parameters('virtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
     "vmNicName": "[concat(parameters('vmName'), 'NetworkInterface')]",
     "vmOSDiskName": "vmOSDisk",

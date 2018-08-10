@@ -1,5 +1,5 @@
 ﻿param(
-[string] $service,
+[string] $project,
 [string] $resourcegroup,
 [string] $env,
 [string] $function,
@@ -15,7 +15,7 @@ Add-AzureRmAccount -Credential $credential -ServicePrincipal -Tenant $tenantid
 Select-AzureRmSubscription -SubscriptionName $sname
 
 $asName = '*as-*'
-$prefix = "$service-$function-$env-as-"
+$prefix = "$project-$function-$env-as-"
 $seqNo = 00
 $lastas = Get-AzureRmAvailabilitySet -ResourceGroupName $resourcegroup | Where-Object Name -Like $asName | Sort-Object Name -Descending | Select-Object -First(1) Name
 

@@ -1,55 +1,54 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": 
-  
-  {
+  "parameters": {
     "availabilitysetName": {
-                              "value": ""
-                           },
-    "businessOwner": {"value": ""},
-    "CASubnetName": {"value": ""},
-    "costCode": { "value": "" },
-    "CustomSchedule": { "value": "" },
-    "diskcount": { "value": "" },
-    "domainjoin": { "value": "" },
-    "domainjoinpassword": { "value": "" },
-    "domainjoinusername": { "value": "" },
-    "environment": { "value": "" },
-    "fqdn": {"value": ""},
-    "oupath": { "value": "" },
-    "project": {"value": ""},
-    "SchedExemption": {"value": ""},
-    "ScheduleType": {"value": ""},
-    "storageaccountType": {"value": ""},
-    "SubnetName": {
       "value": ""
     },
-    "technicalOwner": { "value": "" },
-    "timezone": {
-      "value": ""
-    },
-    "virtualNetworkName": { "value": "" },
-    "virtualNetworkResourceGroup": {
-      "value": ""
-    },
-    "vmAdminPassword": { "value": "" },
-    "vmAdminUserName": {
-      "value": ""
-    },
-    "vmName": { "value": "" },
-    "vmsize": {
-      "value": ""
-    },
-    "imagesku": {
-      "value": ""
-    },
-    "imageoffer": {
-      "value": ""
-    },
-    "imagepublisher": {
-      "value": ""
+    "businessOwner": { "value": "" },
+    "dataDiskSize": { "value": "" },
+      "MgmtSubnetName": { "value": "" },
+      "costCode": { "value": "" },
+      "CustomSchedule": { "value": "" },
+      "diskcount": { "value": "" },
+      "domainjoin": { "value": "" },
+      "domainjoinpassword": { "value": "" },
+      "domainjoinusername": { "value": "" },
+      "environment": { "value": "" },
+      "fqdn": { "value": "" },
+      "oupath": { "value": "" },
+      "project": { "value": "" },
+      "SchedExemption": { "value": "" },
+      "ScheduleType": { "value": "" },
+      "storageaccountType": { "value": "" },
+      "SubnetName": {
+        "value": ""
+      },
+      "technicalOwner": { "value": "" },
+      "timezone": {
+        "value": ""
+      },
+      "virtualNetworkName": { "value": "" },
+      "virtualNetworkResourceGroup": {
+        "value": ""
+      },
+      "vmAdminPassword": { "value": "" },
+      "vmAdminUserName": {
+        "value": ""
+      },
+      "vmName": { "value": "" },
+      "vmsize": {
+        "value": ""
+      },
+      "imagesku": {
+        "value": ""
+      },
+      "imageoffer": {
+        "value": ""
+      },
+      "imagepublisher": {
+        "value": ""
+      }
     }
-  }
 
-}
+  }

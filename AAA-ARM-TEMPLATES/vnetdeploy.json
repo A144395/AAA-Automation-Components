@@ -1,0 +1,108 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "sap-poc-nprd-vnet-01"
+    },
+    "vnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.228.16.0/21",
+      "metadata": {
+        "description": "IP Range for Vnet"
+      }
+    },
+    "WebSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.228.16.0/24",
+      "metadata": {
+        "description": "IP Range for Web Subnet"
+      }
+    },
+    "DataSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.228.17.0/24",
+      "metadata": {
+        "description": "IP Range for Data Subnet"
+      }
+    },
+    "MgmtSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.228.16.0/24",
+      "metadata": {
+        "description": "IP Range for Mgmt Subnet"
+      }
+    },
+    "WebSubnetName": {
+      "type": "string",
+      "defaultValue": "Enter Subnet Name",
+      "metadata": {
+        "description": "Web Subnet"
+      }
+    },
+    "DataSubnetName": {
+      "type": "string",
+      "defaultValue": "data",
+      "metadata": {
+        "description": "Data Subnet"
+      }
+    },
+    "virtualNetworkResourceGroup": {
+      "type": "string",
+      "defaultValue": "data",
+      "metadata": {
+        "description": "Data Subnet"
+      }
+    },
+    "MgmtSubnetName": {
+      "type": "string",
+      "defaultValue": "mgmt",
+      "metadata": {
+        "description": "Management Subnet"
+      }
+    }
+  },
+      "variables": {},
+      "resources": [
+        {
+          "name": "[parameters('virtualNetworkName')]",
+          "type": "Microsoft.Network/virtualNetworks",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2016-03-30",
+          "dependsOn": [],
+          "tags": {
+            "displayName": "vnet"
+          },
+          "properties": {
+            "addressSpace": {
+              "addressPrefixes": [
+                "[parameters('vnetPrefix')]"
+              ]
+            },
+            "subnets": [
+              {
+                "name": "[parameters('WebSubnetName')]",
+                "properties": {
+                  "addressPrefix": "[parameters('WebSubnetPrefix')]"
+                }
+              },
+              {
+                "name": "[parameters('DataSubnetName')]",
+                "properties": {
+                  "addressPrefix": "[parameters('DataSubnetPrefix')]"
+                }
+              },
+              {
+                "name": "[parameters('MgmtSubnetName')]",
+                "properties": {
+                  "addressPrefix": "[parameters('MgmtSubnetPrefix')]"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "outputs": {
+      }
+    }
