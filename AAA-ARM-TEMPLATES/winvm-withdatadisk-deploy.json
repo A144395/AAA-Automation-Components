@@ -15,11 +15,11 @@
       }
     },
     "MgmtSubnetName": {
+      "type": "string",
       "defaultValue": "mgmt",
       "metadata": {
         "description": "Cyber Ark Subnet"
-      },
-      "type": "string"
+      }
     },
     "costCode": {
       "type": "string",
@@ -48,13 +48,14 @@
         "description": "Size of data disks to be attached."
       }
     },
-        "domainjoin": {
+    "domainjoin": {
+      "type": "string",
       "defaultValue": "no",
       "allowedValues": [
         "yes",
         "no"
       ],
-      "type": "string",
+
       "minLength": 1
     },
     "domainjoinpassword": {
@@ -103,11 +104,12 @@
       }
     },
     "ScheduleType": {
+      "type": "string",
       "defaultValue": "Non_Prod_Std",
       "metadata": {
         "description": "scheduleType for tagging purpose, e.g. Non_Prod_Std, AlwaysOn_24_7"
-      },
-      "type": "string"
+      }
+
     },
     "storageaccountType": {
       "type": "string",
@@ -146,11 +148,12 @@
       "defaultValue": "sap-poc-nprd-vnet-01"
     },
     "virtualNetworkResourceGroup": {
-      "defaultValue": "AAA-PTE-POC",
-      "type": "string"
+      "type": "string",
+      "defaultValue": "AAA-PTE-POC"
+
     },
     "vmAdminPassword": {
-      "type": "securestring"
+      "type": "string"
     },
     "vmAdminUserName": {
       "type": "string",
@@ -168,16 +171,19 @@
       }
     },
     "imagesku": {
-      "defaultValue": "2016-Datacenter",
-      "type": "string"
+      "type": "string",
+      "defaultValue": "2016-Datacenter"
+
     },
+
     "imageoffer": {
-      "defaultValue": "WindowsServer",
-      "type": "string"
+      "type": "string",
+      "defaultValue": "WindowsServer"
     },
     "imagepublisher": {
-      "defaultValue": "MicrosoftWindowsServer",
-      "type": "string"
+      "type": "string",
+      "defaultValue": "MicrosoftWindowsServer"
+
 
     }
   },
