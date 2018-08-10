@@ -212,9 +212,7 @@
     },
     {
       "apiVersion": "2017-10-01",
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
-      ],
+      "dependsOn": [],
       "location": "[resourceGroup().location]",
       "name": "[variables('vmNicName')]",
       "properties": {
@@ -352,10 +350,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[resourceGroup().location]",
       "apiVersion": "2016-03-30",
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
-
-      ],
+      "dependsOn": [],
       "tags": {
         "displayName": "ManagementNic",
         "BusinessOwner": "[parameters('businessOwner')]",
