@@ -326,7 +326,9 @@
       "location": "[resourceGroup().location]",
       "name": "[parameters('availabilitysetName')]",
       "properties": {
-        },
+        "platformFaultDomainCount": "[variables('asfdcount')]",
+        "platformUpdateDomainCount": "[variables('asudcount')]"
+      },
       "sku": {
         "name": "Aligned"
       },
@@ -407,7 +409,7 @@
   ],
   "variables": {
     "asfdcount": 2,
-    "asudcount": 3,
+    "asudcount": 5,
     "storageaccountName": "[concat('sa', uniqueString(resourceGroup().id))]",
     "vmImageOffer": "[parameters('imageoffer')]",
     "vmImageSku": "[parameters('imagesku')]",
