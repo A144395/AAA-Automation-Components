@@ -28,6 +28,7 @@
     <Content Include="winvm-withdatadisk-deploy.json" />
     <Content Include="winvm-nodatadisk.parameters.json" />
     <None Include="azuredeploy.json" />
+    <None Include="Diskpool.ps1" />
     <None Include="vnetdeploy.parameters.json" />
     <None Include="vnetdeploy.json" />
     <None Include="createuniquevmname.ps1" />
