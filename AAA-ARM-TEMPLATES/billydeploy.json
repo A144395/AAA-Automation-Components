@@ -332,9 +332,14 @@
         },
         "SubnetName": {
             "type": "string",
-            "defaultValue": "Enter Subnet Name",
             "metadata": {
                 "description": "Private IP for VM instances from Subnet"
+            }
+        },
+        "CyberArkSubnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Private IP for VM instances from Subnet for CyberArk"
             }
         },
         "storageAccountType": {
@@ -377,11 +382,7 @@
             }
         },
         "EnableAvailabilitySet": {
-            "type": "string",
-            "allowedValues": [
-                "Yes",
-                "No"
-            ],
+            "type": "bool",
             "metadata": {
                 "description": "Select whether the VM should be in production or not."
             }
@@ -402,7 +403,7 @@
         },
         "domainJoinUserName": {
             "type": "string",
-            "defaultValue": "AGL\\A139480",
+            "defaultValue": "AGL\\Axxxxx",
             "metadata": {
                 "description": "Domain NetBiosName plus User name of a domain user with sufficient rights to perfom domain join operation. E.g. domain\\username"
             }
@@ -428,11 +429,7 @@
             }
         },
         "EnableCyberArk": {
-            "type": "string",
-            "allowedValues": [
-                "Yes",
-                "No"
-            ],
+            "type": "bool",
             "metadata": {
                 "description": "Enable CyberArk or not"
             }
@@ -457,32 +454,9 @@
         "adminUsername": "azureadmin",
         "diskType": "Managed",
         "nic1Name": "[concat(parameters('vmName'),'-sysnic')]",
-        "nic2Name": "[concat(parameters('vmName'),'-ca')]",
-        "dualNICs": [
-            {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nic1Name'))]",
-                "properties": {
-                    "primary": true
-                }
-            },
-            {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nic2Name'))]",
-                "properties": {
-                    "primary": false
-                }
-            }
-        ],
-        "oneNIC": [
-            {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nic1Name'))]",
-                "properties": {
-                    "primary": true
-                }
-            }
-        ],
+        "nic2Name": "[concat(parameters('vmName'),'-canic')]",
         "storageAccountName": "[toLower(concat(parameters('vmName'),'vhds'))]",
         "windowshub": "Windows_Server",
-        "CASubnetName": "mgmt",
         "sharedVariables": {
             "storageAccountType": "[parameters('storageAccountType')]"
         },
@@ -496,72 +470,46 @@
         "availabilitySetPlatformUpdateDomainCount": 3,
         "domainJoinOptions": "3",
         "bsscriptName": "[concat(parameters('platform'), '_', 'bootstrap_', toLower(parameters('project')), '.ps1')]",
-        "GitHubFetcherWebServiceURI": "https://githubprivatefilefetcher.azurewebsites.net/api/GitHubPrivateRepoFileFetcher",
         "bootstrapurl": "https://dscfilestor01.blob.core.windows.net/bootstrap/",
-        "_GitHubLocation": "https://raw.githubusercontent.com/AGLEnergy/Enterprise-Platforms/master/Azure%20Deployment/NestTemplates",
-        "_GitHubAccessToken": "f73a0617dd2f15f6c70b77b6d0760d7d32d19260",
-        "artifactsLocation": "[concat(variables('GitHubFetcherWebServiceURI'), '?githuburi=', variables('_GitHubLocation'), '/StaticIP.json', '&githubaccesstoken=', variables('_GitHubAccessToken'))]"
-    },
-    "resources": [
-        {
-            "condition": "[if(equals(variables('diskType'), 'Unmanaged'), bool('true'), bool('false'))]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[concat(variables('storageAccountName'))]",
-            "apiVersion": "2017-06-01",
-            "location": "[resourceGroup().location]",
-            "comments": "This storage account is used to hold all unmanaged disks of vm",
-            "sku": {
-                "name": "[parameters('storageAccountType')]"
-            },
-            "kind": "Storage",
-            "tags": {
-                "BusinessOwner": "[parameters('businessOwner')]",
-                "TechnicalOwner": "[parameters('technicalOwner')]",
-                "Environment": "[parameters('environment')]",
-                "CostCode": "[parameters('CostCode')]",
-                "Project": "[parameters('project')]",
-                "ScheduleType": "[parameters('ScheduleType')]",
-                "SchedExemption": "[parameters('SchedExemption')]",
-                "CustomSchedule": "[parameters('CustomSchedule')]"
-            },
-            "properties": {
-                "encryption": {
-                    "keySource": "Microsoft.Storage",
-                    "services": {
-                        "blob": {
-                            "enabled": true
-                        },
-                        "file": {
-                            "enabled": true
-                        }
+        "copy": [
+            {
+                "name": "dataDisks",
+                "count": "[if(equals(parameters('numberOfDataDisks'), 0), 1, length(parameters('diskConfig')))]",
+                "input": {
+                    "name": "[concat(parameters('diskConfig')[CopyIndex('dataDisks')].name)]",
+                    "diskSizeGB": "[parameters('diskConfig')[CopyIndex('dataDisks')].diskSizeGB]",
+                    "lun": "[parameters('diskConfig')[copyIndex('dataDisks')].lun]",
+                    "createOption": "Empty",
+                    "managedDisk": {
+                        "storageAccountType": "[parameters('diskConfig')[copyIndex('dataDisks')].type]"
                     }
                 }
             }
-        },
-        {
-            "condition": "[equals(parameters('EnableAvailabilitySet'), 'Yes')]",
-            "type": "Microsoft.Compute/availabilitySets",
-            "apiVersion": "2017-03-30",
-            "name": "[parameters('availabilitySetName')]",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "BusinessOwner": "[parameters('businessOwner')]",
-                "TechnicalOwner": "[parameters('technicalOwner')]",
-                "Environment": "[parameters('environment')]",
-                "CostCode": "[parameters('CostCode')]",
-                "Project": "[parameters('project')]",
-                "ScheduleType": "[parameters('ScheduleType')]",
-                "SchedExemption": "[parameters('SchedExemption')]",
-                "CustomSchedule": "[parameters('CustomSchedule')]"
-            },
-            "properties": {
-                "platformFaultDomainCount": "[variables('availabilitySetPlatformFaultDomainCount')]",
-                "platformUpdateDomainCount": "[variables('availabilitySetPlatformUpdateDomainCount')]"
-            },
-            "sku": {
-                "name": "Aligned"
+        ],
+        "singlenic": [
+            {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nic1Name'))]",
+                "properties": {
+                    "primary": true
+                }
             }
-        },
+        ],
+        "dualnics": [
+            {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nic1Name'))]",
+                "properties": {
+                    "primary": true
+                }
+            },
+            {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nic2Name'))]",
+                "properties": {
+                    "primary": false
+                }
+            }
+        ]
+    },
+    "resources": [
         {
             "apiVersion": "2017-10-01",
             "type": "Microsoft.Network/networkInterfaces",
@@ -593,7 +541,7 @@
             }
         },
         {
-            "condition": "[equals(parameters('EnableCyberArk'), 'Yes')]",
+            "condition": "[parameters('EnableCyberArk')]",
             "apiVersion": "2017-10-01",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('nic2Name')]",
@@ -611,11 +559,11 @@
             "properties": {
                 "ipConfigurations": [
                     {
-                        "name": "ipconfig2",
+                        "name": "ipconfig1",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
-                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', variables('CASubnetName'))]"
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('CyberArkSubnetName'))]"
                             }
                         }
                     }
@@ -624,9 +572,9 @@
             }
         },
         {
-            "apiVersion": "2017-12-01",
+            "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[concat(parameters('vmName'))]",
+            "name": "[parameters('vmName')]",
             "location": "[resourceGroup().location]",
             "tags": {
                 "BusinessOwner": "[parameters('businessOwner')]",
@@ -639,9 +587,7 @@
                 "CustomSchedule": "[parameters('CustomSchedule')]"
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))]",
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nic2Name'))]",
-                "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))]"
             ],
             "properties": {
                 "licenseType": "[if(equals(parameters('platform'), 'WinSrv'), variables('windowshub'), json('null'))]",
@@ -667,24 +613,10 @@
                         "caching": "ReadWrite",
                         "managedDisk": "[if(equals(variables('diskType'), 'Managed'), variables('sharedVariables'), json('null'))]"
                     },
-                    "copy": [
-                        {
-                            "name": "dataDisks",
-                            "count": "[if(equals(parameters('numberOfDataDisks'), 0), 1, length(parameters('diskConfig')))]",
-                            "input": {
-                                "name": "[concat(parameters('diskConfig')[CopyIndex('dataDisks')].name)]",
-                                "diskSizeGB": "[parameters('diskConfig')[CopyIndex('dataDisks')].diskSizeGB]",
-                                "lun": "[parameters('diskConfig')[copyIndex('dataDisks')].lun]",
-                                "createOption": "Empty",
-                                "managedDisk": {
-                                    "storageAccountType": "[parameters('diskConfig')[copyIndex('dataDisks')].type]"
-                                }
-                            }
-                        }
-                    ]
+                    "dataDisks": "[if(equals(parameters('numberOfDataDisks'),0),json('null'),variables('dataDisks'))]"
                 },
                 "networkProfile": {
-                    "networkInterfaces": "[if(equals(parameters('EnableCyberArk'), 'Yes'), variables('dualNICs'), variables('oneNIC'))]"
+                    "networkInterfaces": "[if(parameters('EnableCyberArk'),variables('dualnics'),variables('singlenic'))]"
                 },
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
@@ -692,161 +624,87 @@
                         "storageUri": "[parameters('BootDiagSA')]"
                     }
                 },
-                "availabilitySet": "[if(equals(parameters('EnableAvailabilitySet'), 'Yes'), variables('availabilitySetId'), json('null'))]"
+                "availabilitySet": "[if(parameters('EnableAvailabilitySet'), variables('availabilitySetId'), json('null'))]"
             }
         },
         {
-            "type": "Microsoft.Resources/deployments",
-            "name": "[concat(parameters('vmname'), '-updateIP')]",
             "apiVersion": "2017-05-10",
+            "name": "[concat(parameters('vmname'), '-updateIP')]",
+            "type": "Microsoft.Resources/deployments",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))]"
             ],
             "properties": {
                 "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('artifactsLocation')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "nicName": {
-                        "value": "[variables('nic1Name')]"
-                    },
-                    "SubnetRef": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('SubnetName'))]"
-                    },
-                    "privateIp": {
-                        "value": "[reference(concat('Microsoft.Network/networkInterfaces/', variables('nic1Name')),'2017-10-01').ipConfigurations[0].properties.privateIPAddress]"
-                    },
-                    "EnableAcceleratedNetworking": {
-                        "value": "[parameters('EnableAcceleratedNetworking')]"
-                    },
-                    "ipconfigname": {
-                        "value": "[concat('ipconfig1')]"
-                    }
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/networkInterfaces",
+                            "name": "[variables('nic1Name')]",
+                            "apiVersion": "2017-10-01",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [],
+                            "properties": {
+                                "ipConfigurations": [
+                                    {
+                                        "name": "[concat('ipconfig1')]",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Static",
+                                            "privateIPAddress": "[reference(concat('Microsoft.Network/networkInterfaces/', variables('nic1Name')),'2017-10-01').ipConfigurations[0].properties.privateIPAddress]",
+                                            "subnet": {
+                                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('SubnetName'))]"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "enableAcceleratedNetworking": "[parameters('EnableAcceleratedNetworking')]"
+                            }
+                        }
+                    ]
                 }
             }
         },
         {
-            "condition": "[equals(parameters('EnableCyberArk'), 'Yes')]",
-            "type": "Microsoft.Resources/deployments",
-            "name": "[concat(parameters('vmname'), '-updateCAIP')]",
+            "condition": "[parameters('EnableCyberArk')]",
             "apiVersion": "2017-05-10",
+            "name": "[concat(parameters('vmname'), '-updateCAIP')]",
+            "type": "Microsoft.Resources/deployments",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nic2Name'))]"
             ],
             "properties": {
                 "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('artifactsLocation')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "nicName": {
-                        "value": "[variables('nic2Name')]"
-                    },
-                    "SubnetRef": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', variables('CASubnetName'))]"
-                    },
-                    "privateIp": {
-                        "value": "[reference(concat('Microsoft.Network/networkInterfaces/', variables('nic2Name')),'2017-10-01').ipConfigurations[0].properties.privateIPAddress]"
-                    },
-                    "EnableAcceleratedNetworking": {
-                        "value": "[parameters('EnableAcceleratedNetworking')]"
-                    },
-                    "ipconfigname": {
-                        "value": "[concat('ipconfig2')]"
-                    }
-                }
-            }
-        },
-        {
-            "condition": "[if(equals(parameters('platform'), 'WinSrv'), bool('true'), bool('false'))]",
-            "apiVersion": "2016-04-30-preview",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmname'), '/joindomain')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "JsonADDomainExtension",
-                "typeHandlerVersion": "1.3",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "Name": "[parameters('domainFQDN')]",
-                    "OUPath": "[parameters('ouPath')]",
-                    "User": "[parameters('domainJoinUserName')]",
-                    "Restart": "true",
-                    "Options": "[variables('domainJoinOptions')]"
-                },
-                "protectedsettings": {
-                    "Password": "[parameters('domainJoinUserPassword')]"
-                }
-            }
-        },
-        {
-            "condition": "[if(equals(parameters('platform'), 'SLES'), bool('true'), bool('false'))]",
-            "name": "[concat(parameters('vmName'), '/SLESbootstrap')]",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "2017-03-30",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Azure.Extensions",
-                "type": "CustomScript",
-                "typeHandlerVersion": "2.0",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[concat('https://dscfilestor01.blob.core.windows.net/bootstrap/', variables('bsscriptName'))]"
-                    ],
-                    "commandToExecute": "[concat('sh ', variables('bsscriptName'))]"
-                }
-            }
-        },
-        {
-            "condition": "[if(equals(parameters('platform'), 'WinSrv'), bool('true'), bool('false'))]",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmName'), '/WinSrvbootstrap')]",
-            "apiVersion": "2017-03-30",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'), '/extensions/joindomain')]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.9",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[concat('https://dscfilestor01.blob.core.windows.net/bootstrap/', variables('bsscriptName'))]"
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/networkInterfaces",
+                            "name": "[variables('nic2Name')]",
+                            "apiVersion": "2017-10-01",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [],
+                            "properties": {
+                                "ipConfigurations": [
+                                    {
+                                        "name": "[concat('ipconfig1')]",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Static",
+                                            "privateIPAddress": "[reference(concat('Microsoft.Network/networkInterfaces/', variables('nic2Name')),'2017-10-01').ipConfigurations[0].properties.privateIPAddress]",
+                                            "subnet": {
+                                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('CyberArkSubnetName'))]"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "enableAcceleratedNetworking": "[parameters('EnableAcceleratedNetworking')]"
+                            }
+                        }
                     ]
-                },
-                "protectedSettings": {
-                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('bsscriptName'))]",
-                    "storageAccountName": "dscfilestor01",
-                    "storageAccountKey": "rkijoTYCcp/LJsOnbjJp6YKHd//m6K8Dvcc0LeO5zbofBlIAhkOynHao8Yi07u2sMDsfIlph9+4fdzRDqkvLAg=="
                 }
             }
         }
-    ],
-    "outputs": {
-        "vmName": {
-            "type": "string",
-            "value": "[parameters('vmName')]"
-        },
-        "vmEndpoint": {
-            "type": "string",
-            "value": "[reference(concat('Microsoft.Network/networkInterfaces/', variables('nic1Name')),'2017-10-01').ipConfigurations[0].properties.privateIPAddress]"
-        },
-        "connectionInfo": {
-            "type": "string",
-            "value": "[if(equals(parameters('platform'), 'WinSrv'), 'Use RDP to connect to the VM', 'Use SSH to connect to the VM')]"
-        }
-    }
+    ]
 }
