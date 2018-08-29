@@ -1,0 +1,733 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "businessOwner": {
+            "type": "string",
+            "defaultValue": "Gary Mason",
+            "metadata": {
+                "description": "Responsible for billing of the resource"
+            }
+        },
+        "technicalOwner": {
+            "type": "string",
+            "defaultValue": "Rahul Arora",
+            "metadata": {
+                "description": "Responsible for the technology decisioins of the resource"
+            }
+        },
+        "environment": {
+            "type": "string",
+            "metadata": {
+                "description": "Provides infromation on the environment that the resource belongs to such as nprd"
+            },
+            "allowedValues": [
+                "prod",
+                "preprod",
+                "sand",
+                "dev",
+                "test",
+                "dr",
+                "uat"
+            ]
+        },
+        "costCode": {
+            "type": "string",
+            "defaultValue": "PD-0422-C16-01",
+            "metadata": {
+                "description": "Provides a charge code or cost center to attribute the bill for the resources too. This could be a project code or cost Centre"
+            }
+        },
+        "project": {
+            "type": "string",
+            "defaultValue": "PT3",
+            "metadata": {
+                "description": "Provides information on the project that the resource group and resources belong to"
+            }
+        },
+        "ScheduleType": {
+            "type": "string",
+            "defaultValue": "Non_Prod_Std",
+            "metadata": {
+                "description": "scheduleType for tagging purpose, e.g. Non_Prod_Std, AlwaysOn_24_7"
+            }
+        },
+        "SchedExemption": {
+            "type": "string",
+            "defaultValue": "FALSE",
+            "metadata": {
+                "description": "scheduleExemption for tagging purpose"
+            }
+        },
+        "CustomSchedule": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "CustomSchedule for tagging purpose"
+            }
+        },
+        "vmLocation": {
+            "type": "string",
+            "allowedValues": [
+                "Sydney",
+                "Melbourne"
+            ],
+            "metadata": {
+                "description": "Location of Azure Virtual Machine"
+            }
+        },
+        "virtualMachineSize": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_G1",
+                "Standard_G2",
+                "Standard_G3",
+                "Standard_G4",
+                "Standard_G5",
+                "Standard_GS1",
+                "Standard_GS2",
+                "Standard_GS3",
+                "Standard_GS4",
+                "Standard_GS4-4",
+                "Standard_GS4-8",
+                "Standard_GS5",
+                "Standard_GS5-8",
+                "Standard_GS5-16",
+                "Standard_L4s",
+                "Standard_L8s",
+                "Standard_L16s",
+                "Standard_L32s",
+                "Standard_A0",
+                "Standard_A1",
+                "Standard_A2",
+                "Standard_A3",
+                "Standard_A5",
+                "Standard_A4",
+                "Standard_A6",
+                "Standard_A7",
+                "Basic_A0",
+                "Basic_A1",
+                "Basic_A2",
+                "Basic_A3",
+                "Basic_A4",
+                "Standard_D1_v2",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_D11_v2",
+                "Standard_D12_v2",
+                "Standard_D13_v2",
+                "Standard_D14_v2",
+                "Standard_D15_v2",
+                "Standard_D2_v2_Promo",
+                "Standard_D3_v2_Promo",
+                "Standard_D4_v2_Promo",
+                "Standard_D5_v2_Promo",
+                "Standard_D11_v2_Promo",
+                "Standard_D12_v2_Promo",
+                "Standard_D13_v2_Promo",
+                "Standard_D14_v2_Promo",
+                "Standard_F1",
+                "Standard_F2",
+                "Standard_F4",
+                "Standard_F8",
+                "Standard_F16",
+                "Standard_A1_v2",
+                "Standard_A2m_v2",
+                "Standard_A2_v2",
+                "Standard_A4m_v2",
+                "Standard_A4_v2",
+                "Standard_A8m_v2",
+                "Standard_A8_v2",
+                "Standard_D2_v3",
+                "Standard_D4_v3",
+                "Standard_D8_v3",
+                "Standard_D16_v3",
+                "Standard_D32_v3",
+                "Standard_D1",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4",
+                "Standard_D11",
+                "Standard_D12",
+                "Standard_D13",
+                "Standard_D14",
+                "Standard_H8",
+                "Standard_H16",
+                "Standard_H8m",
+                "Standard_H16m",
+                "Standard_H16r",
+                "Standard_H16mr",
+                "Standard_B1ms",
+                "Standard_B1s",
+                "Standard_B2ms",
+                "Standard_B2s",
+                "Standard_B4ms",
+                "Standard_B8ms",
+                "Standard_DS1_v2",
+                "Standard_DS2_v2",
+                "Standard_DS3_v2",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2",
+                "Standard_DS11-1_v2",
+                "Standard_DS11_v2",
+                "Standard_DS12-1_v2",
+                "Standard_DS12-2_v2",
+                "Standard_DS12_v2",
+                "Standard_DS13-2_v2",
+                "Standard_DS13-4_v2",
+                "Standard_DS13_v2",
+                "Standard_DS14-4_v2",
+                "Standard_DS14-8_v2",
+                "Standard_DS14_v2",
+                "Standard_DS15_v2",
+                "Standard_DS2_v2_Promo",
+                "Standard_DS3_v2_Promo",
+                "Standard_DS4_v2_Promo",
+                "Standard_DS5_v2_Promo",
+                "Standard_DS11_v2_Promo",
+                "Standard_DS12_v2_Promo",
+                "Standard_DS13_v2_Promo",
+                "Standard_DS14_v2_Promo",
+                "Standard_F1s",
+                "Standard_F2s",
+                "Standard_F4s",
+                "Standard_F8s",
+                "Standard_F16s",
+                "Standard_D2s_v3",
+                "Standard_D4s_v3",
+                "Standard_D8s_v3",
+                "Standard_D16s_v3",
+                "Standard_D32s_v3",
+                "Standard_NV6",
+                "Standard_NV12",
+                "Standard_NV24",
+                "Standard_D64_v3",
+                "Standard_D64s_v3",
+                "Standard_E2_v3",
+                "Standard_E4_v3",
+                "Standard_E8_v3",
+                "Standard_E16_v3",
+                "Standard_E32_v3",
+                "Standard_E64i_v3",
+                "Standard_E64_v3",
+                "Standard_E2s_v3",
+                "Standard_E4-2s_v3",
+                "Standard_E4s_v3",
+                "Standard_E8-2s_v3",
+                "Standard_E8-4s_v3",
+                "Standard_E8s_v3",
+                "Standard_E16-4s_v3",
+                "Standard_E16-8s_v3",
+                "Standard_E16s_v3",
+                "Standard_E32-8s_v3",
+                "Standard_E32-16s_v3",
+                "Standard_E32s_v3",
+                "Standard_E64-16s_v3",
+                "Standard_E64-32s_v3",
+                "Standard_E64is_v3",
+                "Standard_E64s_v3",
+                "Standard_DS1",
+                "Standard_DS2",
+                "Standard_DS3",
+                "Standard_DS4",
+                "Standard_DS11",
+                "Standard_DS12",
+                "Standard_DS13",
+                "Standard_DS14",
+                "Standard_NC6",
+                "Standard_NC12",
+                "Standard_NC24",
+                "Standard_NC24r"
+            ],
+            "metadata": {
+                "description": "The size of the VM Created"
+            }
+        },
+        "LinuxPublisher": {
+            "type": "string",
+            "allowedValues": [
+                "SUSE"
+            ],
+            "metadata": {
+                "description": "The Linux Distro for the VM. This will pick a fully patched image with the latest version, e.g. SUSE"
+            }
+        },
+        "LinuxOffer": {
+            "type": "string",
+            "allowedValues": [
+                "SLES",
+                "SLES-BYOS",
+                "SLES-SAP",
+                "SLES-SAP-BYOS"
+            ],
+            "metadata": {
+                "description": "The Linux Offer for the VM, e.g. SLES-SAP-BYOS, SLES-SAP, SLES, SLES-BYOS"
+            }
+        },
+        "LinuxSku": {
+            "type": "string",
+            "allowedValues": [
+                "12-SP2",
+                "12-SP3"
+            ],
+            "metadata": {
+                "description": "The Linux SKU for the VM, e.g. 12-SP3"
+            }
+        },
+        "WindowsPublisher": {
+            "type": "string",
+            "allowedValues": [
+                "MicrosoftWindowsServer"
+            ],
+            "metadata": {
+                "description": "The Windows Distro for the VM, e.g. MicrosoftWindowsServer"
+            }
+        },
+        "WindowsSku": {
+            "type": "string",
+            "allowedValues": [
+                "2012-R2-Datacenter",
+                "2016-Datacenter"
+            ],
+            "metadata": {
+                "description": "The Windows Offer for the VM, e.g. WindowsServer"
+            }
+        },
+        "WindowsOffer": {
+            "type": "string",
+            "allowedValues": [
+                "WindowsServer"
+            ],
+            "metadata": {
+                "description": "The Windows SKU for the VM, e.g. 2016-Datacenter, 2012-R2-Datacenter"
+            }
+        },
+        "EnableAcceleratedNetworking": {
+            "type": "bool",
+            "metadata": {
+                "description": "Enable Accelerated Networking, true or false"
+            }
+        },
+        "vnetName": {
+            "type": "string",
+            "defaultValue": "pt3-nprd-vnet-01",
+            "metadata": {
+                "description": "Virtual Network for VM to be created with"
+            }
+        },
+        "vnetResourceGroup": {
+            "type": "string",
+            "defaultValue": "Enter Resource Group Name for the Virtual Network",
+            "metadata": {
+                "description": "Virtual Network Resource Group Name"
+            }
+        },
+        "SubnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Private IP for VM instances from Subnet"
+            }
+        },
+        "CyberArkSubnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Private IP for VM instances from Subnet for CyberArk"
+            }
+        },
+        "storageAccountType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Standard_RAGRS",
+                "Standard_ZRS",
+                "Premium_LRS"
+            ],
+            "metadata": {
+                "description": "Storage Account Redundancy type."
+            }
+        },
+        "diskConfig": {
+            "type": "array"
+        },
+        "numberOfDataDisks": {
+            "type": "int",
+            "metadata": {
+                "description": "Number of data disks to be attached."
+            }
+        },
+        "platform": {
+            "type": "string",
+            "allowedValues": [
+                "WinSrv",
+                "SLES"
+            ],
+            "metadata": {
+                "description": "Select the OS type to deploy."
+            }
+        },
+        "pwdOrssh": {
+            "type": "securestring",
+            "metadata": {
+                "description": "If Windows, specify the password for the OS username. If Linux, provide the SSH."
+            }
+        },
+        "EnableAvailabilitySet": {
+            "type": "bool",
+            "metadata": {
+                "description": "Select whether the VM should be in production or not."
+            }
+        },
+        "availabilitySetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Naming convention, <service-short-name>-<context>-as, e.g. profx-sql-as"
+            }
+        },
+        "availabilitySetPlatformFaultDomainCount": {
+            "type": "string",
+            "defaultValue": "2"
+        },
+        "availabilitySetPlatformUpdateDomainCount": {
+            "type": "string",
+            "defaultValue": "3"
+        },
+        "domainJoinUserName": {
+            "type": "string",
+            "defaultValue": "AGL\\Axxxxx",
+            "metadata": {
+                "description": "Domain NetBiosName plus User name of a domain user with sufficient rights to perfom domain join operation. E.g. domain\\username"
+            }
+        },
+        "domainJoinUserPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Domain user password"
+            }
+        },
+        "domainFQDN": {
+            "type": "string",
+            "defaultValue": "agl.int",
+            "metadata": {
+                "description": "Domain FQDN where the virtual machine will be joined"
+            }
+        },
+        "ouPath": {
+            "type": "string",
+            "defaultValue": "OU=SAP,OU=Servers,OU=Resources,DC=agl,DC=int",
+            "metadata": {
+                "description": "Specifies an organizational unit (OU) for the domain account. Enter the full distinguished name of the OU in quotation marks. Example: OU=testOU; DC=domain; DC=Domain; DC=com"
+            }
+        },
+        "EnableCyberArk": {
+            "type": "bool",
+            "metadata": {
+                "description": "Enable CyberArk or not"
+            }
+        },
+        "BootDiagSA": {
+            "type": "string",
+            "allowedValues": [
+                "http://isgecmbootdiag.blob.core.windows.net",
+                "http://isgprdmeldiagnosticssa01.blob.core.windows.net",
+                "http://isgprdsyddiagnosticssa01.blob.core.windows.net",
+                "http://erpshareddiag01.blob.core.windows.net",
+                "http://erpshareddiag02.blob.core.windows.net",
+                "http://erpshareddiag03.blob.core.windows.net",
+                "http://erpshareddiag04.blob.core.windows.net",
+                "https://aaaarmsa01.blob.core.windows.net"
+            ],
+            "metadata": {
+                "description": "ECM ISG-PROD MEL:isgprdmeldiagnosticssa01;ECM ISG-PROD SYD: isgprdsyddiagnosticssa01;ECM ISG-DEV SYD: isgecmbootdiag; PT3 NON-PROD SYD:erpshareddiag01;PT3 NON-PROD MEL:erpshareddiag02;PT3 PROD SYD:erpshareddiag04;PT3 PROD MEL:erpshareddiag03"
+            }
+        },
+        "numberOfInstances": {
+            "metadata": {
+                "description": "Number of instances to be built, min 1 and max 200"
+            },
+            "type": "int",
+            "minValue": 1,
+            "maxValue": 200
+        },
+        "vmNamePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "VM namimng prefix, e.g. azsaw or azsal etc"
+            }
+        },
+        "vmNameStart": {
+            "type": "int",
+            "metadata": {
+                "description": "VM naming start number between 1 and 9500"
+            },
+            "minValue": 1,
+            "maxValue": 9500
+        }
+    },
+    "variables": {
+        "adminUsername": "azureadmin",
+        "diskType": "Managed",
+        "windowshub": "Windows_Server",
+        "sharedVariables": {
+            "storageAccountType": "[parameters('storageAccountType')]"
+        },
+        "timezonevar": {
+            "timeZone": "AUS Eastern Standard Time"
+        },
+        "availabilitySetId": {
+            "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
+        },
+        "availabilitySetPlatformFaultDomainCount": 2,
+        "availabilitySetPlatformUpdateDomainCount": 3,
+        "domainJoinOptions": "3",
+        "bsscriptName": "[concat(parameters('platform'), '_', 'bootstrap_', toLower(parameters('project')), '.ps1')]",
+        "bootstrapurl": "https://dscfilestor01.blob.core.windows.net/bootstrap/"
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-10-01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-sysnic')]",
+            "copy": {
+                "name": "sysnicLoop",
+                "count": "[parameters('numberOfInstances')]"
+            },
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "BusinessOwner": "[parameters('businessOwner')]",
+                "TechnicalOwner": "[parameters('technicalOwner')]",
+                "Environment": "[parameters('environment')]",
+                "CostCode": "[parameters('costCode')]",
+                "Project": "[parameters('project')]",
+                "ScheduleType": "[parameters('ScheduleType')]",
+                "SchedExemption": "[parameters('SchedExemption')]",
+                "CustomSchedule": "[parameters('CustomSchedule')]"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('SubnetName'))]"
+                            }
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": "[parameters('EnableAcceleratedNetworking')]"
+            }
+        },
+        {
+            "apiVersion": "2017-10-01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-canic')]",
+            "copy": {
+                "name": "canicLoop",
+                "count": "[parameters('numberOfInstances')]"
+            },
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "BusinessOwner": "[parameters('businessOwner')]",
+                "TechnicalOwner": "[parameters('technicalOwner')]",
+                "Environment": "[parameters('environment')]",
+                "CostCode": "[parameters('costCode')]",
+                "Project": "[parameters('project')]",
+                "ScheduleType": "[parameters('ScheduleType')]",
+                "SchedExemption": "[parameters('SchedExemption')]",
+                "CustomSchedule": "[parameters('CustomSchedule')]"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('CyberArkSubnetName'))]"
+                            }
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": "[parameters('EnableAcceleratedNetworking')]"
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-updateIP')]",
+            "copy": {
+                "name": "sysnicLoop",
+                "count": "[parameters('numberOfInstances')]"
+            },
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-sysnic')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/networkInterfaces",
+                            "name": "[concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-sysnic')]",
+                            "apiVersion": "2017-10-01",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [],
+                            "properties": {
+                                "ipConfigurations": [
+                                    {
+                                        "name": "[concat('ipconfig1')]",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Static",
+                                            "privateIPAddress": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-sysnic')),'2017-10-01').ipConfigurations[0].properties.privateIPAddress]",
+                                            "subnet": {
+                                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('SubnetName'))]"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "enableAcceleratedNetworking": "[parameters('EnableAcceleratedNetworking')]"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-updateCAIP')]",
+            "copy": {
+                "name": "canicLoop",
+                "count": "[parameters('numberOfInstances')]"
+            },
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-canic')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/networkInterfaces",
+                            "name": "[concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-canic')]",
+                            "apiVersion": "2017-10-01",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [],
+                            "properties": {
+                                "ipConfigurations": [
+                                    {
+                                        "name": "[concat('ipconfig1')]",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Static",
+                                            "privateIPAddress": "[reference(concat('Microsoft.Network/networkInterfaces/', concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-canic')),'2017-10-01').ipConfigurations[0].properties.privateIPAddress]",
+                                            "subnet": {
+                                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', parameters('vnetResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('CyberArkSubnetName'))]"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "enableAcceleratedNetworking": "[parameters('EnableAcceleratedNetworking')]"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-06-01",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'))]",
+            "copy": {
+                "name": "vmLoop",
+                "count": "[parameters('numberOfInstances')]"
+            },
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "BusinessOwner": "[parameters('businessOwner')]",
+                "TechnicalOwner": "[parameters('technicalOwner')]",
+                "Environment": "[parameters('environment')]",
+                "CostCode": "[parameters('costCode')]",
+                "Project": "[parameters('project')]",
+                "ScheduleType": "[parameters('ScheduleType')]",
+                "SchedExemption": "[parameters('SchedExemption')]",
+                "CustomSchedule": "[parameters('CustomSchedule')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-sysnic'))]",
+                "[concat('Microsoft.Network/networkInterfaces/', concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-canic'))]"
+            ],
+            "properties": {
+                "licenseType": "[if(equals(parameters('platform'), 'WinSrv'), variables('windowshub'), json('null'))]",
+                "hardwareProfile": {
+                    "vmSize": "[parameters('virtualMachineSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'))]",
+                    "adminUsername": "[variables('adminUsername')]",
+                    "adminpassword": "[parameters('pwdOrssh')]",
+                    "windowsConfiguration": "[if(equals(parameters('platform'), 'WinSrv'), variables('timezonevar'), json('null'))]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[if(equals(parameters('platform'), 'WinSrv'), parameters('windowsPublisher'), parameters('linuxPublisher'))]",
+                        "offer": "[if(equals(parameters('platform'), 'WinSrv'), parameters('windowsOffer'), parameters('linuxOffer'))]",
+                        "version": "latest",
+                        "sku": "[if(equals(parameters('platform'), 'WinSrv'), parameters('windowsSku'), parameters('linuxSku'))]"
+                    },
+                    "osDisk": {
+                        "name": "[concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-osdisk')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": "[if(equals(variables('diskType'), 'Managed'), variables('sharedVariables'), json('null'))]"
+                    },
+                    "copy": [
+                        {
+                            "name": "dataDisks",
+                            "count": "[if(equals(parameters('numberOfDataDisks'), 0), 1, length(parameters('diskConfig')))]",
+                            "input": {
+                                "name": "[concat(toLower(parameters('vmNamePrefix')), padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-', parameters('diskConfig')[CopyIndex('dataDisks')].name)]",
+                                "diskSizeGB": "[parameters('diskConfig')[CopyIndex('dataDisks')].diskSizeGB]",
+                                "lun": "[parameters('diskConfig')[copyIndex('dataDisks')].lun]",
+                                "createOption": "Empty",
+                                "managedDisk": {
+                                    "storageAccountType": "[parameters('diskConfig')[copyIndex('dataDisks')].type]"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-sysnic'))]",
+                            "properties": {
+                                "primary": true
+                            }
+                        },
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(toLower(parameters('vmNamePrefix')),  padLeft(copyIndex(parameters('vmNameStart')), 4, '0'), '-canic'))]",
+                            "properties": {
+                                "primary": false
+                            }
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[parameters('BootDiagSA')]"
+                    }
+                },
+                "availabilitySet": "[if(parameters('EnableAvailabilitySet'), variables('availabilitySetId'), json('null'))]"
+            }
+        }
+    ]
+}
