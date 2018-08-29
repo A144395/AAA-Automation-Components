@@ -1,0 +1,130 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountType": {
+            "value": "Premium_LRS"
+        },
+        "vnetName": {
+            "value": "aunp-syd-nprd-vnet-01"
+        },
+        "vnetResourceGroup": {
+            "value": "aunp-nprd-rg-01"
+        },
+        "SubnetName": {
+            "value": "Subnet1"
+        },
+        "businessOwner": {
+            "value": "Gavin Phuah"
+        },
+        "technicalOwner": {
+            "value": "Ben Macri"
+        },
+        "environment": {
+            "value": "prod"
+        },
+        "costCode": {
+            "value": "PD-0441-C01"
+        },
+        "project": {
+            "value": "PT3"
+        },
+        "ScheduleType": {
+            "value": "AlwaysOn_24_7"
+        },
+        "SchedExemption": {
+            "value": "false"
+        },
+        "CustomSchedule": {
+            "value": ""
+        },
+        "vmLocation": {
+            "value": "Melbourne"
+        },
+        "platform": {
+            "value": "WinSrv"
+        },
+        "WindowsOffer": {
+            "value": "WindowsServer"
+        },
+        "WindowsSku": {
+            "value": "2016-Datacenter"
+        },
+        "WindowsPublisher": {
+            "value": "MicrosoftWindowsServer"
+        },
+        "LinuxOffer": {
+            "value": "SLES-BYOS"
+        },
+        "LinuxSku": {
+            "value": "12-SP3"
+        },
+        "LinuxPublisher": {
+            "value": "SUSE"
+        },
+        "pwdOrssh": {
+            "value": "Hp0p3n^1ew!@"
+        },
+        "domainJoinUserName": {
+            "value": "AGL\\svc_azure_automation"
+        },
+        "domainJoinUserPassword": {
+            "value": "xxxx"
+        },
+        "domainFQDN": {
+            "value": "agl.int"
+        },
+        "ouPath": {
+            "value": "OU=SAP,OU=Servers,OU=Resources,DC=agl,DC=int"
+        },
+        "availabilitySetName": {
+            "value": "ecm-prod-otds-as"
+        },
+        "availabilitySetPlatformFaultDomainCount": {
+            "value": "2"
+        },
+        "availabilitySetPlatformUpdateDomainCount": {
+            "value": "5"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_DS3_v2"
+        },
+        "EnableAcceleratedNetworking": {
+            "value": true
+        },
+        "EnableAvailabilitySet": {
+            "value": false
+        },
+        "numberOfDataDisks": {
+            "value": 0
+        },
+        "diskConfig": {
+            "value": [
+                {
+                    "name": "data1",
+                    "diskSizeGB": "50",
+                    "lun": "0",
+                    "type": "Premium_LRS"
+                }
+            ]
+        },
+        "EnableCyberArk": {
+            "value": true
+        },
+        "CyberArkSubnetName": {
+            "value": "app-kube"
+        },
+        "BootDiagSA": {
+            "value": "https://aaaarmsa01.blob.core.windows.net"
+        },
+        "numberOfInstances": {
+            "value": 3
+        },
+        "vmNamePrefix": {
+            "value": "AZSAL"
+        },
+        "vmNameStart": {
+            "value": 99
+        }
+    }
+}
